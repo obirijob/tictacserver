@@ -2,13 +2,11 @@
 
 const router = require('express').Router()
 const db = require('../db')
-const wss = require('../WebSocket')
+// const wss = require('../WebSocket')
 const { grid } = require('../core/playerActions')
 
 router.post('/move', (req, res) => {
   const { gameId, player, row, column } = req.body
-
-  console.log({ gameId, player, row, column })
 
   //   const result = move(gameId, player, row, column)
   db.query(`SELECT * FROM games WHERE id='${gameId}'`, (err, data) => {
@@ -60,6 +58,17 @@ router.post('/move', (req, res) => {
         .json({ success: false, error: 'No Game of that ID' })
     }
   })
+})
+
+router.post('/reset', (req, res) => {
+  const { gameId } = req.body
+  db.query(
+    `UPDATE games SET moves = NULL where id='${gameId}'`,
+    (err, data) => {
+      if (err) return res.status(500).json({ error: err })
+      return res.json('Reset Successful')
+    }
+  )
 })
 
 module.exports = router

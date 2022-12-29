@@ -54,7 +54,7 @@ function move(gameId, player, row, column) {
 async function grid(gameId) {
   const data = await new Promise((res, rej) => {
     db.query(`select * from games where id ='${gameId}'`, (err, data) => {
-      if (data.length < 1) ws.send(`${gameId}<*-*>[]`)
+      if (data.length < 1) res([]) //ws.send(`${gameId}<*-*>[]`)
       res(data[0].moves)
     })
   })
