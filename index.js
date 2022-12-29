@@ -38,10 +38,11 @@ wss.on('connection', ws => {
       case 'loadGrid':
         const [gId, ply, opp] = actionData.split('<//>')
         let d = await grid(gId)
+        let obj = d == null ? '[]' : d
         for (let c in connections) {
           if (c == ply || c == opp) {
             console.log(c)
-            connections[c].send(d)
+            connections[c].send(obj)
           }
         }
         break
